@@ -2,7 +2,7 @@
 
 The backend is built using Flask.
 
-## Author : Sai Annam
+### Author : Sai Annam
 
 ### Live Testing
 Access the app at https://pdf-password-remover.onrender.com
