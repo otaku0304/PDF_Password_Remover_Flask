@@ -22,8 +22,8 @@ This endpoint allows you to remove the password from an encrypted PDF file. To u
 
 - **Request Body:** The request body should be of type `multipart/form-data` and should include the following fields:
 
-  - `password` (string): The password required to decrypt the PDF file.
-  - `pdfFile` (file): The encrypted PDF file you want to remove the password from.
+  - `password` (Text): The password required to decrypt the PDF file.
+  - `pdfFile` (File): The encrypted PDF file you want to remove the password from.
 
   To send the request using tools like `curl` or Postman, ensure that you select the `multipart/form-data` option and include the `password` and `pdffile` keys accordingly.
 
