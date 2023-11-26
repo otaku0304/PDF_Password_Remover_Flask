@@ -11,10 +11,10 @@ Access the app at https://pdf-password-remover.onrender.com
 
 ### Installation For runing the project in local machine.
 
-1. Clone the repository:
-2. Install dependencies:
-3. Start the Flask server:
-4. Access the application at http://127.0.0.1:5000 in your web browser.
+1. Clone the repository: https://github.com/otaku0304/PDF_Password_Remover_Flask.git
+2. Install dependencies: pip install -r requirements.txt
+3. Start the Flask server: flask run
+4. Access the application at http://127.0.0.1:5000
 
    
 ### API Endpoints
