@@ -2,7 +2,13 @@
 
 The backend is built using Flask.
 
-### Installation
+
+### Live Testing
+Access the app at https://pdf-password-remover.onrender.com
+
+
+
+### Installation For runing the project in local machine.
 
 1. Clone the repository:
 2. Install dependencies:
@@ -26,6 +32,9 @@ This endpoint allows you to remove the password from an encrypted PDF file. To u
   - `pdfFile` (File): The encrypted PDF file you want to remove the password from.
 
   To send the request using tools like `curl` or Postman, ensure that you select the `multipart/form-data` option and include the `password` and `pdffile` keys accordingly.
+
+## Deplouy and Hosted
+The flask projected was deployed and hosted on Render
 
 ## Contact
 
