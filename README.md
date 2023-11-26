@@ -1,3 +1,5 @@
+# Author : Sai Annam
+
 # PDF_Password_Remover_Flask
 
 The backend is built using Flask.
@@ -33,7 +35,7 @@ This endpoint allows you to remove the password from an encrypted PDF file. To u
 
   To send the request using tools like `curl` or Postman, ensure that you select the `multipart/form-data` option and include the `password` and `pdffile` keys accordingly.
 
-## Deplouy and Hosted
+## Deploy and Hosted
 The flask projected was deployed and hosted on Render
 
 ## Contact
