@@ -6,7 +6,7 @@ import tempfile
 app = Flask(__name__)
 
 # Configure CORS to allow requests from your Angular app
-CORS(app, resources={r"/remove_password": {"origins": "http://localhost:4200"}})
+CORS(app, resources={r"/remove_password": {"origins": "https://otaku0304.github.io/PDF_Password_Remover_Angular/"}})
 
 
 @app.route('/remove_password', methods=['POST'])
