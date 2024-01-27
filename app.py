@@ -3,10 +3,12 @@ from PyPDF2 import PdfReader, PdfWriter
 from flask_cors import CORS
 import tempfile
 
+from config import Config
+
 app = Flask(__name__)
 
 # Configure CORS to allow requests from your Angular app
-CORS(app, resources={r"/remove_password": {"origins": "https://pdf-password-remover.onrender.com"}})
+CORS(app, resources=Config.CORS_RESOURCES)
 
 
 @app.route('/remove_password', methods=['POST'])
