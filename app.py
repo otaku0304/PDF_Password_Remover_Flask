@@ -1,17 +1,17 @@
 from flask import Flask, request, send_file
 from PyPDF2 import PdfReader, PdfWriter
-from flask_cors import CORS
+from flask_cors import cross_origin
 import tempfile
-
-from config import Config
 
 app = Flask(__name__)
 
-# Configure CORS to allow requests from your Angular app
-CORS(app, resources=Config.CORS_RESOURCES)
-
-
 @app.route('/remove_password', methods=['POST'])
+@cross_origin(origins=[
+    "http://localhost:4200",
+    "https://pdf-password-remover-angular.onrender.com",
+    "https://angular-pdf-pr-master.onrender.com",
+])
+
 def unlock_pdf():
     password = request.form.get('password')
     uploaded_file = request.files['pdfFile']
