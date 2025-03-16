@@ -12,6 +12,7 @@ app = Flask(__name__)
     "https://angular-pdf-pr-master.onrender.com",
 ])
 
+# check
 def unlock_pdf():
     password = request.form.get('password')
     uploaded_file = request.files['pdfFile']
