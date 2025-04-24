@@ -2,3 +2,4 @@ Flask
 Gunicorn
 PYPDF2
 Flask-Cors
+pycryptodome
