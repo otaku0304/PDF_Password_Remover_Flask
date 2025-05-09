@@ -8,8 +8,14 @@ app = Flask(__name__)
 @app.route('/remove_password', methods=['POST'])
 @cross_origin(origins=[
     "http://localhost:4200",
+
+    # render links
     "https://pdf-password-remover-angular.onrender.com",
     "https://angular-pdf-pr-master.onrender.com",
+    "https://pdf-fe-git-dev-otaku0304s-projects.vercel.app/",
+
+    # vercel links
+    "https://pdf-fe-kappa.vercel.app/"
 ])
 
 def unlock_pdf():
