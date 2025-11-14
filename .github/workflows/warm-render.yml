@@ -1,0 +1,15 @@
+name: Warm Render
+
+on:
+  schedule:
+    # Every 12 minutes during business hours IST (Mon–Sat 09:30–21:30)
+    # IST = UTC+5:30 ⇒ 09:30–21:30 IST == 04:00–16:00 UTC
+    - cron: "*/12 4-16 * * 1-6"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Curl health
+        run: curl -fsS https://flask-pdf-pr-main.onrender.com/health || true

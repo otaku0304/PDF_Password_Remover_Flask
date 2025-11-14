@@ -199,5 +199,10 @@ def remove_password_hmac():
     except Exception as e:
         return jsonify({"error": f"processing_error: {e}"}), 500
 
+@app.get("/health")
+def health():
+    return "ok", 200
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", "5000")), debug=(ENV=="local"))
