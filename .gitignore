@@ -43,3 +43,6 @@ Thumbs.db
 
 .env.local
 .env.prod
+
+hmac_keys.json
+hmac_usage.json

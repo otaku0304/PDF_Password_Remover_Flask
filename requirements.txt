@@ -4,3 +4,5 @@ Gunicorn
 PYPDF2
 Flask-Cors
 pycryptodome
+Flask-Limiter
+python-dotenv
