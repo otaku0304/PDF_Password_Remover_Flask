@@ -167,7 +167,7 @@ def decrypt_secret(enc_b64: str) -> str:
     return pt.decode()
 
 # ============================
-# First-party request token (unchanged)
+# First-party request token (IP binding removed)
 # ============================
 _used_jti: Dict[str, float] = {}
 
@@ -185,7 +185,7 @@ def already_used(jti: str) -> bool:
     prune_used()
     return jti in _used_jti
 
-def issue_req_token(ip: str) -> str:
+def issue_req_token() -> str:
     iat = now_utc()
     exp = iat + timedelta(seconds=REQ_TOKEN_TTL_SEC)
     jti = secrets.token_urlsafe(20)
@@ -195,11 +195,10 @@ def issue_req_token(ip: str) -> str:
         "iat": int(iat.timestamp()),
         "exp": int(exp.timestamp()),
         "jti": jti,
-        "ip": ip,
     }
     return jwt.encode(payload, SECRET_KEY, algorithm="HS256")
 
-def verify_req_token(token: str, ip: str) -> Tuple[bool, str]:
+def verify_req_token(token: str) -> Tuple[bool, str]:
     try:
         decoded = jwt.decode(
             token,
@@ -209,11 +208,8 @@ def verify_req_token(token: str, ip: str) -> Tuple[bool, str]:
             issuer=API_ISSUER,
         )
         jti = decoded.get("jti") or ""
-        tok_ip = decoded.get("ip") or ""
         if already_used(jti):
             return False, "replayed"
-        if ip and tok_ip and ip != tok_ip:
-            return False, "ip_mismatch"
         mark_used(jti, decoded["exp"])
         return True, "ok"
     except jwt.ExpiredSignatureError:
@@ -426,15 +422,21 @@ def unlock_with_timeout(file_storage, password: str, timeout_sec: int, max_pages
 # ============================
 @app.after_request
 def add_security_headers(resp):
-    # Click-jacking
-    resp.headers.setdefault("X-Frame-Options", "DENY")
-    resp.headers.setdefault("Content-Security-Policy", "frame-ancestors 'none'")
+    # Frame protections (force-set, not setdefault)
+    resp.headers["X-Frame-Options"] = "DENY"
+    # Strong CSP (update/merge if you already have one elsewhere)
+    resp.headers["Content-Security-Policy"] = (
+        "frame-ancestors 'none'; "
+        "default-src 'none'; "
+        "base-uri 'none'; "
+        "form-action 'none'"
+    )
     # Sniffing / referrer
-    resp.headers.setdefault("X-Content-Type-Options", "nosniff")
-    resp.headers.setdefault("Referrer-Policy", "no-referrer")
+    resp.headers["X-Content-Type-Options"] = "nosniff"
+    resp.headers["Referrer-Policy"] = "no-referrer"
     # HSTS only when explicitly enabled and behind TLS
     if os.environ.get("ENABLE_HSTS", "0") == "1":
-        resp.headers.setdefault("Strict-Transport-Security", "max-age=15552000; includeSubDomains")
+        resp.headers["Strict-Transport-Security"] = "max-age=15552000; includeSubDomains"
     return resp
 
 # ============================
@@ -444,21 +446,19 @@ def add_security_headers(resp):
 def health():
     return "ok", 200
 
-# ---------- FIRST-PARTY (unchanged) ----------
+# ---------- FIRST-PARTY (IP binding removed) ----------
 @app.post("/api/prepare")
 def prepare():
     origin = (request.headers.get("Origin") or "").rstrip("/")
     if ALLOWED_ORIGINS and origin and origin not in ALLOWED_ORIGINS:
         return jsonify({"error": "origin_not_allowed"}), 403
-    ip = request.headers.get("X-Forwarded-For", request.remote_addr or "")
-    token = issue_req_token(ip)
+    token = issue_req_token()  # no IP binding
     return jsonify({"req_token": token}), 200
 
 @app.post("/api/remove_password")
 def remove_password_first_party():
     req_token = request.headers.get("X-REQ-TOKEN", "")
-    ip = request.headers.get("X-Forwarded-For", request.remote_addr or "")
-    ok, reason = verify_req_token(req_token, ip)
+    ok, reason = verify_req_token(req_token)
     if not ok:
         return jsonify({"error": reason or "bad_token"}), 401
 
