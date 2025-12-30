@@ -427,9 +427,10 @@ def add_security_headers(resp):
     # Strong CSP (update/merge if you already have one elsewhere)
     resp.headers["Content-Security-Policy"] = (
         "frame-ancestors 'none'; "
-        "default-src 'none'; "
-        "base-uri 'none'; "
-        "form-action 'none'"
+        "default-src 'self'; "
+        "connect-src 'self' https://flask-pdf-pr-main.onrender.com; "
+        "base-uri 'self'; "
+        "form-action 'self'"
     )
     # Sniffing / referrer
     resp.headers["X-Content-Type-Options"] = "nosniff"
